@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
 	public ModelMapper modelMapper;
 
 	@Override
-	public OrderDTO placeOrder(String email, Long cartId, String paymentMethod) {
+	public OrderDTO placeOrder(String email, Long cartId, String paymentMethod, Long creditCardNumber, Integer cvv) {
 
 		Cart cart = cartRepo.findCartByEmailAndCartId(email, cartId);
 
@@ -82,8 +82,11 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderStatus("Order Accepted !");
 
 		Payment payment = new Payment();
+		
 		payment.setOrder(order);
 		payment.setPaymentMethod(paymentMethod);
+		payment.setCreditCardNumber(creditCardNumber);
+		payment.setCvv(cvv);
 
 		payment = paymentRepo.save(payment);
 

@@ -31,4 +31,12 @@ public class Payment {
 	@Size(min = 4, message = "Payment method must contain atleast 4 characters")
 	private String paymentMethod;
 
+	@NotBlank
+	@Size(min = 16, max = 16, message = "Credit card number must contain 16 digits")
+	private Long creditCardNumber;
+
+	@NotBlank
+	@Size(min = 3, max = 3, message = "CVV must contain 3 digits")
+	private Integer cvv;
+
 }

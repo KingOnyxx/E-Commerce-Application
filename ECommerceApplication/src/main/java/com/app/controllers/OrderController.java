@@ -29,8 +29,14 @@ public class OrderController {
 	public OrderService orderService;
 	
 	@PostMapping("/public/users/{email}/carts/{cartId}/payments/{paymentMethod}/order")
-	public ResponseEntity<OrderDTO> orderProducts(@PathVariable String email, @PathVariable Long cartId, @PathVariable String paymentMethod) {
-		OrderDTO order = orderService.placeOrder(email, cartId, paymentMethod);
+	public ResponseEntity<OrderDTO> orderProducts(@PathVariable String email, @PathVariable Long cartId, @PathVariable String paymentMethod,
+			@RequestParam(name = "creditCardNumber", required = false) Long creditCardNumber,
+			@RequestParam(name = "cvv", required = false) Integer cvv) {
+		if (!paymentMethod.equalsIgnoreCase("creditCard")) {
+			orderService.updateOrder(email, cartId, "Failed");
+			return new ResponseEntity<OrderDTO>(HttpStatus.BAD_REQUEST);
+		}
+		OrderDTO order = orderService.placeOrder(email, cartId, paymentMethod, creditCardNumber, cvv);
 		
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.CREATED);
 	}
